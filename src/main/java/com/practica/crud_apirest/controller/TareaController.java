@@ -13,8 +13,16 @@ import com.practica.crud_apirest.mapper.TareaMapper;
 import com.practica.crud_apirest.repository.Repo_Tareas;
 import com.practica.crud_apirest.service.TareaService;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+
 
 
 @RestController
@@ -27,8 +35,27 @@ public class TareaController {
     @GetMapping
     public List<TareaDTO> Listar(){
 
-        return servicio_tarea.Consulta();
+        return servicio_tarea.service_ConsultaTarea();
     }
+
+    @PostMapping
+    public TareaDTO insertarTarea(@RequestBody TareaDTO dto) {
+        
+        return servicio_tarea.service_InsertaTarea(dto);
+    }
+
+    @PutMapping("/{id_tarea}")
+    public TareaDTO actualizarTarea(@PathVariable Long id_tarea, @RequestBody TareaDTO dto) {
+        
+        return servicio_tarea.service_actualizaTarea(id_tarea, dto);
+    }
+
+    @DeleteMapping("/{id_tarea}")
+    public String borrarTarea(@PathVariable Long id_tarea){
+        return servicio_tarea.service_eliminaTarea(id_tarea);
+    }
+    
+    
     
 
 }
