@@ -27,8 +27,8 @@ public class CrudApirestApplication implements CommandLineRunner {
 		System.out.println("Aplicación iniciada correctamente");
 
 		//crea una lista y obtiene las tareas del repositorio
-		List<Tarea> tareas = repositorio_tareas.findAll();
-		tareas.stream().forEach(tarea -> System.out.println(tarea));
+		/* List<Tarea> tareas = repositorio_tareas.findAll();
+		tareas.stream().forEach(tarea -> System.out.println(tarea)); */
 	}
 
 }
