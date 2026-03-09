@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Lista de empleados</title>
+</head>
+<body>
+    <header class="bg-blue-500 w-full h-25 flex items-center p-4">
+        <label for="" class="text-3xl text-white p-5 font-bold">TAREAS</label>
+    </header>
+<div class="overflow-x-auto w-full p-5">
+    <table class=" table w-full">
+        <thead>
+            <tr>
+            <th>ID tarea</th>
+            <th>Título</th>
+            <th>Descripción</th>
+            <th>Estado</th>
+            <th>Fecha de creación</th>
+            <th>Fecha fin</th>
+            <th>Última mod.</th>
+        </tr>
+        </thead>
+        <tbody class="text-center">
+            <tr th:each="item : ${tareas}">
+                <td th:text="${item.id_tarea}"></td>
+                <td th:text="${item.titulo}"></td>
+                <td th:text="${item.descripcion}"></td>
+                <td th:text="${item.estado}"></td>
+                <td th:text="${item.fecha_creacion}"></td>
+                <td th:text="${item.fecha_fin}"></td>
+                <td th:text="${item.ultima_mod}"></td>
+                <td>
+                    <a href="">
+                        <button class="btn bg-blue-500 text-white font-bold rounded p-2 m-2 shadow-lg hover:cursor-pointer">Editar</button>
+                    </a>
+                </td>
+                <td>
+                    <a href="">
+                        <button class="btn bg-red-500 text-white text-sm font-bold rounded p-2 m-2 shadow-lg hover:cursor-pointer">Borrar</button>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+    
+    
+    
+</body>
+</html>

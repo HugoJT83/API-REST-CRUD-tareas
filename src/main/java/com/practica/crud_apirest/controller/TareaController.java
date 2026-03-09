@@ -35,8 +35,9 @@ public class TareaController {
     @GetMapping
     public List<TareaDTO> Listar(){
 
-        return servicio_tarea.service_ConsultaTarea();
+        return servicio_tarea.service_ConsultaTareas();
     }
+
 
     @PostMapping
     public TareaDTO insertarTarea(@RequestBody TareaDTO dto) {

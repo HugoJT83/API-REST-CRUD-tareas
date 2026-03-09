@@ -20,10 +20,17 @@ public class TareaService {
     @Autowired
     private Repo_Tareas repo;
 
-    public List<TareaDTO> service_ConsultaTarea(){
+    public List<TareaDTO> service_ConsultaTareas(){
 
         return repo.findAll().stream().map(TareaMapper::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    public TareaDTO service_buscaTarea(Long id_tarea, TareaDTO dto){
+
+            return repo.findById(id_tarea)
+                        .map(TareaMapper::toDTO)
+                        .orElseThrow(()-> new RuntimeException("Tarea no encontrada con id: "+id_tarea));
     }
 
     public TareaDTO service_InsertaTarea(TareaDTO dto){
