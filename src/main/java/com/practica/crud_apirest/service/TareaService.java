@@ -41,6 +41,7 @@ public class TareaService {
     public TareaDTO service_InsertaTarea(TareaDTO dto){
         //Convertimos a Entidad
         Tarea tarea = TareaMapper.toEntity(dto);
+        tarea.setUltima_mod(LocalDateTime.now());
 
         //insercion a BD (insert y si existe update)
         Tarea insercion = repo.save(tarea);

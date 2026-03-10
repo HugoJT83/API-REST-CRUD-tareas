@@ -9,7 +9,15 @@
 </head>
 <header class="bg-blue-500 w-full h-25 flex items-center p-4 justify-between">
         <label for="" class="text-3xl text-white p-5 font-bold">TAREAS</label>
-        <a href="/"><button class="m-2 p-1 pl-4 bg-gray-100 rounded-xl shadow-md/30 hover:cursor-pointer">Volver<i class="fa-solid fa-arrow-left m-2"></i></button></a>
+        <div class="flex items-center">
+            <a href="form_new.html" class="bg-cyan-500 text-white font-bold p-3 rounded-xl hover:cursor-pointer shadow-md/30"><i class="fa-solid fa-plus m-2"></i>Crear Tarea</a>
+            <div class="bg-yellow-500 m-3 p-3 text-white rounded-xl text-bold shadow-md/30">
+                <i class="fa-solid fa-magnifying-glass m-2 hover:cursor-pointer" onclick="buscarTarea()"></i>
+                <input type="text" id="inputIdTarea" class="w-30" placeholder="Introduce un ID...">
+            </div>
+            <button onclick="cargarTareas()" class="bg-green-500 text-white font-bold p-3 rounded-xl hover:cursor-pointer shadow-md/30"><i class="fa-solid fa-list m-2"></i>Listar todas</button>
+        </div>
+        <a href="index.html"><button class="m-2 p-1 pl-4 bg-gray-100 rounded-xl shadow-md/30 hover:cursor-pointer">Volver<i class="fa-solid fa-arrow-left m-2"></i></button></a>
     </header>
 <body>
     
@@ -37,6 +45,51 @@
 </body>
 
 <script>
+
+    async function buscarTarea(){
+        const id_tarea = document.getElementById("inputIdTarea").value;
+
+        if(isNaN(Number(id_tarea))){
+            alert("El valor no es válido.");
+            return;
+        }
+
+        try{
+            const respuesta = await fetch(`/api/tareas/${id_tarea}`);
+
+            if(!respuesta.ok){
+                throw new Error("Tarea no encontrada");
+            }
+
+            const tarea = await respuesta.json();
+            const tbody = document.querySelector('#tablaTareas tbody');
+
+            tbody.innerHTML = "";
+
+            const fila = `<tr>
+                <td>${tarea.id_tarea}</td>
+                <td>${tarea.titulo}</td>
+                <td>${tarea.descripcion}</td>
+                <td>${tarea.estado}</td>
+                <td>${tarea.fecha_creacion}</td>
+                <td>${tarea.fecha_fin}</td>
+                <td>${tarea.ultima_mod}</td>
+                <td>
+                    <a href="form.html?id=${tarea.id_tarea}">
+                        <button  class="btn bg-blue-500 text-white font-bold rounded p-2 m-2 shadow-md/30 hover:cursor-pointer">Editar</button>
+                    </a>
+                </td>
+                <td>
+                        <button onclick="eliminarTarea(${tarea.id_tarea})" class="btn bg-red-500 text-white font-bold rounded p-2 m-2 shadow-md/30 hover:cursor-pointer">Borrar</button>
+                </td>
+            `;
+
+            tbody.innerHTML += fila;
+        }
+        catch(error){
+            alert("Error: "+ error.message);
+        }   
+    }
 
     async function cargarTareas(){
         const respuesta = await fetch("/api/tareas");
