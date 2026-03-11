@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,6 +13,8 @@ import com.practica.crud_apirest.entity.Tarea;
 import com.practica.crud_apirest.mapper.TareaMapper;
 import com.practica.crud_apirest.repository.Repo_Tareas;
 import com.practica.crud_apirest.service.TareaService;
+
+import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,7 +43,7 @@ public class TareaController {
     }
 
     @GetMapping("/{id_tarea}")
-    public TareaDTO buscarTarea(@PathVariable Long id_tarea) {
+    public TareaDTO buscarTarea(@Valid @PathVariable Long id_tarea) {
         return servicio_tarea.service_buscaTarea(id_tarea);
     }
     
