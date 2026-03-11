@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://kit.fontawesome.com/1c2e66feae.js" crossorigin="anonymous"></script>
+    <title>Tareas</title>
+</head>
+<body class="flex justify-center align-middle">
+    <div class="w-full max-w-xs m-8 flex justify-center align-middle">
+      <form id="formTarea" class="bg-white shadow-lg/30 rounded px-8 pt-6 pb-8 mb-4">
+        <h1 class="m-3 font-bold text-3xl">Tarea con id: <label id="id_tarea"></label></h1>
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2">
+            Título
+          </label>
+          <input required minlength="5" maxlength="45" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="titulo" type="text">
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2">
+            Descripción
+          </label>
+          <textarea required rows="6" minlength="5" maxlength="200" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="descripcion" type="text"></textarea>
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2">
+            Estado
+          </label>
+          <div class="w-full">
+            <input type="radio" id="estado-por_hacer" name="estado" class="m-2"> Por hacer <br>
+          <input type="radio" id="estado-hecho" name="estado" class="m-2"> Hecho
+          </div>
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2">
+            Fecha fin
+          </label>
+          <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="fecha_fin" type="datetime-local">
+        </div>
+        <div class="flex items-center justify-between">
+          <button class="bg-blue-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+            Confirmar
+          </button>
+          <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="listado.html">
+            Cancelar
+          </a>
+        </div>
+      </form>
+    </div>
+</body>
+
+<script>
+
+  //recibo de datos (si los hay)
+  document.addEventListener('DOMContentLoaded', async() =>{
+
+    const parametros = new URLSearchParams(window.location.search);
+    const id_tarea = parametros.get('id');
+
+    if(id_tarea){
+
+      const response = await fetch(`/api/tareas/${id_tarea}`);
+      const tarea = await response.json();
+
+
+
+      document.getElementById("id_tarea").innerHTML = tarea.id_tarea;
+      document.getElementById("titulo").value = tarea.titulo;
+      document.getElementById("descripcion").value = tarea.descripcion;
+      
+      if(tarea.estado =="POR_HACER"){
+
+        document.getElementById("estado-por_hacer").checked = true;
+      }
+      else{
+
+        
+        document.getElementById("estado-hecho").checked = true;
+      }
+
+      document.getElementById("fecha_fin").value = tarea.fecha_fin;
+    }
+  })
+
+  //envio de datos modificados
+  document.getElementById('formTarea').addEventListener('submit',async (e)=>{
+
+    e.preventDefault();
+    const id_tarea = document.getElementById("id_tarea").innerHTML;
+    
+    let estado_tarea = "POR_HACER";
+    if(document.getElementById("estado-hecho").checked == true){
+
+      estado_tarea = "HECHO";
+    }
+
+    const dto = {
+
+      titulo: document.getElementById("titulo").value,
+      descripcion: document.getElementById("descripcion").value,
+      estado: estado_tarea,
+      fecha_fin: document.getElementById("fecha_fin").value,
+
+    }
+
+    const response = await fetch(`/api/tareas/${id_tarea}`,{
+      method: 'PUT',
+      headers: { 'Content-Type':'application/json'},
+      body: JSON.stringify(dto)
+    });
+
+    if(response.ok){
+      alert("Tarea actualizada");
+      window.location.href = "listado.html";
+    }
+    else{
+      alert("Error al actualizar");
+    }
+  })
+
+
+
+
+</script>
+</html>

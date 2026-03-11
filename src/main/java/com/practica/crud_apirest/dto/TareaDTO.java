@@ -4,13 +4,35 @@ import java.time.LocalDateTime;
 
 import com.practica.crud_apirest.entity.Estado;
 
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 public class TareaDTO {
+
+
     private Long id_tarea;
+
+    @NotBlank(message = "el titulo es obligatorio")
+    @Size(min = 5, message = "el titulo tiene que tener más de 5 caracteres")
+    @Size(max = 45, message = "el titulo no puede tener más de 45 caracteres")
     private String titulo;
+
+    @NotBlank(message = "la descripcion es obligatoria")
+    @Size(min = 5,max = 200, message = "la descripcion no puede tener más de 200 caracteres")
     private String descripcion;
+
+    @Pattern(regexp = "HECHO|POR_HACER")
     private Estado estado;
+
+    @FutureOrPresent(message = "la fecha tiene que ser de hoy en adelante.")
     private LocalDateTime fecha_creacion;
+
+    @FutureOrPresent(message = "la fecha tiene que ser de hoy en adelante.")
     private LocalDateTime fecha_fin;
+
+    @FutureOrPresent(message = "la fecha tiene que ser de hoy en adelante.")
     private LocalDateTime ultima_mod;
 
 
