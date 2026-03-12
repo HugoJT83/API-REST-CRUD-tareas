@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.swing.text.html.parser.Entity;
+
 import org.hibernate.type.descriptor.java.LocalDateTimeJavaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,8 +14,11 @@ import org.springframework.stereotype.Service;
 import com.practica.crud_apirest.dto.TareaDTO;
 import com.practica.crud_apirest.entity.Estado;
 import com.practica.crud_apirest.entity.Tarea;
+import com.practica.crud_apirest.exceptions.TareaErrores;
 import com.practica.crud_apirest.mapper.TareaMapper;
 import com.practica.crud_apirest.repository.Repo_Tareas;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class TareaService {
@@ -35,7 +40,7 @@ public class TareaService {
             return TareaMapper.toDTO(tarea);
         }
         else{
-            throw new RuntimeException("Tarea no encontrada con id: "+id_tarea);
+            throw new EntityNotFoundException("Tarea no encontrada con id: "+ id_tarea);
         }
     }
 

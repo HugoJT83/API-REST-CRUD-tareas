@@ -2,9 +2,12 @@ package com.practica.crud_apirest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyLong;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,8 +23,11 @@ import org.springframework.cglib.core.Local;
 import com.practica.crud_apirest.dto.TareaDTO;
 import com.practica.crud_apirest.entity.Estado;
 import com.practica.crud_apirest.entity.Tarea;
+import com.practica.crud_apirest.exceptions.TareaErrores;
 import com.practica.crud_apirest.repository.Repo_Tareas;
 import com.practica.crud_apirest.service.TareaService;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @ExtendWith(MockitoExtension.class)
 public class TareaTest {
@@ -57,20 +63,13 @@ public class TareaTest {
         tareaDTO.setFecha_fin(LocalDateTime.now());
         tareaDTO.setUltima_mod(LocalDateTime.now());
     }
-
-
-    //Consulta Tareas
-
-    //Buscar tareas
-
-    //Insertar tareas
-
-    //actualizar tareas
+    
 
     //eliminar tareas
 
     //actualizar un campo de una tarea
 
+    //Consulta Tareas (todas)
     @Test 
     void consulta_devuelveLista() {
         List<Tarea> listaEntidades = List.of(tareaEntidad);
@@ -84,5 +83,91 @@ public class TareaTest {
         Mockito.verify(tareaRepo, Mockito.times(1)).findAll();
 
     }
+
+    //buscar por id (caso exito)
+    @Test
+    void buscaTarea_devuelveTareaDTO(){
+        Mockito.when(tareaRepo.findById(1L)).thenReturn(Optional.of(tareaEntidad));
+
+        TareaDTO resultado = tareaService.service_buscaTarea(1L);
+
+        assertNotNull(resultado);
+        assertEquals(1L, resultado.getId_tarea());
+        assertEquals("titulo", resultado.getTitulo());
+
+    }
+
+    //buscar por id (caso error)
+    @Test
+    void buscaTarea_noExiste_devuelveExcepcion(){
+        Mockito.when(tareaRepo.findById(99L)).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, ()->{
+            tareaService.service_buscaTarea(99L);
+        });
+
+        Mockito.verify(tareaRepo).findById(99L);
+    }
+
+    //----
+
+
+    //inserta tarea
+    @Test
+    void insertaTarea_guardaCorrectamente(){
+
+        Mockito.when(tareaRepo.save(Mockito.any(Tarea.class))).thenReturn(tareaEntidad);
+
+        TareaDTO resultado = tareaService.service_InsertaTarea(tareaDTO);
+        assertNotNull(resultado);
+        assertEquals(1L, resultado.getId_tarea());
+        Mockito.verify(tareaRepo,Mockito.times(1)).save(Mockito.any(Tarea.class));
+    }
+
+    //actualiza tarea (campo "estado")
+    @Test
+    void actualizaCampoTarea_campoEstado(){
+
+        Mockito.when(tareaRepo.findById(1L)).thenReturn(Optional.of(tareaEntidad));
+        Mockito.when(tareaRepo.save(Mockito.any(Tarea.class))).thenAnswer(i -> {
+            return (Tarea) i.getArguments()[0];
+        });
+
+
+        TareaDTO resultado = tareaService.service_actualizaCampoTarea(1L,"estado","HECHO");
+        
+        assertEquals(Estado.HECHO, resultado.getEstado());
+        Mockito.verify(tareaRepo).save(tareaEntidad);
+    }
+
+    //borra tarea (exito)
+    @Test
+    void borraTarea_devuelveMensajeExito(){
+
+        Mockito.when(tareaRepo.existsById(1L)).thenReturn(true);
+        Mockito.doNothing().when(tareaRepo).deleteById(1L);
+
+        String resultado = tareaService.service_eliminaTarea(1L);
+
+        assertEquals("Tarea borrada correctamente", resultado);
+        Mockito.verify(tareaRepo, Mockito.times(1)).existsById(1L);
+        Mockito.verify(tareaRepo, Mockito.times(1)).deleteById(1L);
+    }
+
+    //borra tarea (error)
+    @Test
+    void borraTarea_casoError(){
+
+        Long idInexistente = 99L;
+        Mockito.when(tareaRepo.existsById(idInexistente)).thenReturn(false);
+
+        String resultado = tareaService.service_eliminaTarea(idInexistente);
+
+        assertEquals("Tarea: 99 no encontrada", resultado);
+
+        Mockito.verify(tareaRepo, Mockito.never()).deleteById(anyLong());
+
+    }
+
 
 }

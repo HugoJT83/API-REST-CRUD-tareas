@@ -2,7 +2,7 @@
 
 Implementación de una **API RESTful** utilizando **Java 21** y **Spring Boot 4**; gestionado con **Maven** y que utiliza **H2** y **MySQL** como gestor de datos.
 
-La aplicación consta de una API que permite obtener e introducir datos en una BD de prueba con una muestra de datos pequeña de ejemplo; cuenta con las siguientes funcionalidades:
+La aplicación consta de una API que permite obtener e introducir datos en una BD de prueba con una muestra de datos pequeña de ejemplo, así como una interfaz simple en HTML y JS para consumirla; cuenta con las siguientes funcionalidades:
 
 * Listar Tareas
 * Insertar Tareas
