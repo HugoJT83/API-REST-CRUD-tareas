@@ -36,7 +36,7 @@
           <label class="block text-gray-700 text-sm font-bold mb-2">
             Fecha fin
           </label>
-          <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="fecha_fin" type="datetime-local">
+          <input required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="fecha_fin" type="datetime-local">
         </div>
         <div class="flex items-center justify-between">
           <button class="bg-blue-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
@@ -56,16 +56,16 @@
   document.addEventListener('DOMContentLoaded', async() =>{
 
     const parametros = new URLSearchParams(window.location.search);
-    const id_tarea = parametros.get('id');
+    const idTarea = parametros.get('id');
 
-    if(id_tarea){
+    if(idTarea){
 
-      const response = await fetch(`/api/tareas/${id_tarea}`);
+      const response = await fetch(`/api/tareas/${idTarea}`);
       const tarea = await response.json();
 
 
 
-      document.getElementById("id_tarea").innerHTML = tarea.id_tarea;
+      document.getElementById("id_tarea").innerHTML = tarea.idTarea;
       document.getElementById("titulo").value = tarea.titulo;
       document.getElementById("descripcion").value = tarea.descripcion;
       
@@ -79,7 +79,7 @@
         document.getElementById("estado-hecho").checked = true;
       }
 
-      document.getElementById("fecha_fin").value = tarea.fecha_fin;
+      document.getElementById("fecha_fin").value = tarea.fechaFin;
     }
   })
 
@@ -87,24 +87,24 @@
   document.getElementById('formTarea').addEventListener('submit',async (e)=>{
 
     e.preventDefault();
-    const id_tarea = document.getElementById("id_tarea").innerHTML;
+    const idTarea = document.getElementById("id_tarea").innerHTML;
     
-    let estado_tarea = "POR_HACER";
+    let estadoTarea = "POR_HACER";
     if(document.getElementById("estado-hecho").checked == true){
 
-      estado_tarea = "HECHO";
+      estadoTarea = "HECHO";
     }
 
     const dto = {
 
       titulo: document.getElementById("titulo").value,
       descripcion: document.getElementById("descripcion").value,
-      estado: estado_tarea,
-      fecha_fin: document.getElementById("fecha_fin").value,
+      estado: estadoTarea,
+      fechaFin: document.getElementById("fecha_fin").value,
 
     }
 
-    const response = await fetch(`/api/tareas/${id_tarea}`,{
+    const response = await fetch(`/api/tareas/${idTarea}`,{
       method: 'PUT',
       headers: { 'Content-Type':'application/json'},
       body: JSON.stringify(dto)

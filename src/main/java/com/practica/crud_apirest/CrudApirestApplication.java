@@ -1,20 +1,12 @@
 package com.practica.crud_apirest;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.practica.crud_apirest.entity.Tarea;
-import com.practica.crud_apirest.repository.Repo_Tareas;
 
 @SpringBootApplication
 public class CrudApirestApplication implements CommandLineRunner {
-
-	@Autowired
-	private Repo_Tareas repositorio_tareas;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CrudApirestApplication.class, args);

@@ -15,16 +15,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.exceptions.base.MockitoException;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
-
 import com.practica.crud_apirest.dto.TareaDTO;
 import com.practica.crud_apirest.entity.Estado;
 import com.practica.crud_apirest.entity.Tarea;
-import com.practica.crud_apirest.exceptions.TareaErrores;
-import com.practica.crud_apirest.repository.Repo_Tareas;
+import com.practica.crud_apirest.repository.TareaRepository;
 import com.practica.crud_apirest.service.TareaService;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -33,7 +28,7 @@ import jakarta.persistence.EntityNotFoundException;
 public class TareaTest {
 
     @Mock
-    private Repo_Tareas tareaRepo;
+    private TareaRepository tareaRepo;
 
     @InjectMocks
     private TareaService tareaService;
@@ -46,22 +41,22 @@ public class TareaTest {
     void setUp(){
 
         tareaEntidad = new Tarea();
-        tareaEntidad.setId_tarea(1L);
+        tareaEntidad.setIdTarea(1L);
         tareaEntidad.setTitulo("titulo");
         tareaEntidad.setDescripcion("Test unitario");
         tareaEntidad.setEstado(Estado.POR_HACER);
-        tareaEntidad.setFecha_creacion(LocalDateTime.now());
-        tareaEntidad.setFecha_fin(LocalDateTime.now());
-        tareaEntidad.setUltima_mod(LocalDateTime.now());
+        tareaEntidad.setFechaCreacion(LocalDateTime.now());
+        tareaEntidad.setFechaFin(LocalDateTime.now());
+        tareaEntidad.setUltimaMod(LocalDateTime.now());
 
         tareaDTO = new TareaDTO();;
-        tareaDTO.setId_tarea(1L);
+        tareaDTO.setIdTarea(1L);
         tareaDTO.setTitulo("titulo");
         tareaDTO.setDescripcion("Test unitario");
         tareaDTO.setEstado(Estado.POR_HACER);
-        tareaDTO.setFecha_creacion(LocalDateTime.now());
-        tareaDTO.setFecha_fin(LocalDateTime.now());
-        tareaDTO.setUltima_mod(LocalDateTime.now());
+        tareaDTO.setFechaCreacion(LocalDateTime.now());
+        tareaDTO.setFechaFin(LocalDateTime.now());
+        tareaDTO.setUltimaMod(LocalDateTime.now());
     }
     
 
@@ -75,7 +70,7 @@ public class TareaTest {
         List<Tarea> listaEntidades = List.of(tareaEntidad);
         Mockito.when(tareaRepo.findAll()).thenReturn(listaEntidades);
 
-        List<TareaDTO> resultado = tareaService.service_ConsultaTareas();
+        List<TareaDTO> resultado = tareaService.serviceListTareas();
 
         assertNotNull(resultado);
         assertEquals(1, resultado.size());
@@ -89,10 +84,10 @@ public class TareaTest {
     void buscaTarea_devuelveTareaDTO(){
         Mockito.when(tareaRepo.findById(1L)).thenReturn(Optional.of(tareaEntidad));
 
-        TareaDTO resultado = tareaService.service_buscaTarea(1L);
+        TareaDTO resultado = tareaService.serviceGetTarea(1L);
 
         assertNotNull(resultado);
-        assertEquals(1L, resultado.getId_tarea());
+        assertEquals(1L, resultado.getIdTarea());
         assertEquals("titulo", resultado.getTitulo());
 
     }
@@ -103,7 +98,7 @@ public class TareaTest {
         Mockito.when(tareaRepo.findById(99L)).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class, ()->{
-            tareaService.service_buscaTarea(99L);
+            tareaService.serviceGetTarea(99L);
         });
 
         Mockito.verify(tareaRepo).findById(99L);
@@ -118,9 +113,9 @@ public class TareaTest {
 
         Mockito.when(tareaRepo.save(Mockito.any(Tarea.class))).thenReturn(tareaEntidad);
 
-        TareaDTO resultado = tareaService.service_InsertaTarea(tareaDTO);
+        TareaDTO resultado = tareaService.serviceAddTarea(tareaDTO);
         assertNotNull(resultado);
-        assertEquals(1L, resultado.getId_tarea());
+        assertEquals(1L, resultado.getIdTarea());
         Mockito.verify(tareaRepo,Mockito.times(1)).save(Mockito.any(Tarea.class));
     }
 
@@ -134,7 +129,7 @@ public class TareaTest {
         });
 
 
-        TareaDTO resultado = tareaService.service_actualizaCampoTarea(1L,"estado","HECHO");
+        TareaDTO resultado = tareaService.serviceUpdateFieldTarea(1L,"estado","HECHO");
         
         assertEquals(Estado.HECHO, resultado.getEstado());
         Mockito.verify(tareaRepo).save(tareaEntidad);
@@ -147,7 +142,7 @@ public class TareaTest {
         Mockito.when(tareaRepo.existsById(1L)).thenReturn(true);
         Mockito.doNothing().when(tareaRepo).deleteById(1L);
 
-        String resultado = tareaService.service_eliminaTarea(1L);
+        String resultado = tareaService.serviceDeleteTarea(1L);
 
         assertEquals("Tarea borrada correctamente", resultado);
         Mockito.verify(tareaRepo, Mockito.times(1)).existsById(1L);
@@ -161,7 +156,7 @@ public class TareaTest {
         Long idInexistente = 99L;
         Mockito.when(tareaRepo.existsById(idInexistente)).thenReturn(false);
 
-        String resultado = tareaService.service_eliminaTarea(idInexistente);
+        String resultado = tareaService.serviceDeleteTarea(idInexistente);
 
         assertEquals("Tarea: 99 no encontrada", resultado);
 

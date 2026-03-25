@@ -1,6 +1,5 @@
 package com.practica.crud_apirest.exceptions;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

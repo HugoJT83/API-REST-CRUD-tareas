@@ -1,6 +1,5 @@
 package com.practica.crud_apirest.entity;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -25,7 +24,7 @@ public class Tarea {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id_tarea")
-    private Long id_tarea;
+    private Long idTarea;
 
     @Column(name="titulo")
     private String titulo;
@@ -38,26 +37,13 @@ public class Tarea {
     private Estado estado;
 
     @Column(name = "fecha_creacion")
-    private LocalDateTime fecha_creacion;
+    private LocalDateTime fechaCreacion;
 
     @Column(name = "fecha_fin")
-    private LocalDateTime fecha_fin;
+    private LocalDateTime fechaFin;
 
     @Column(name = "ultima_mod")
-    private LocalDateTime ultima_mod;
-    
-    @Override
-    public String toString(){
-        return "Tarea{"+
-            "id: " + this.id_tarea +
-            ", titulo: "+ this.titulo +
-            ", descripcion: "+ this.descripcion +
-            ", estado: "+ this.estado +
-            ", fecha_creacion: "+this.fecha_creacion +
-            ", fecha_fin: " + this.fecha_fin +
-            ", ultima_mod: " + this.ultima_mod +
-            "}";
-    }; 
+    private LocalDateTime ultimaMod;
     
 }
 

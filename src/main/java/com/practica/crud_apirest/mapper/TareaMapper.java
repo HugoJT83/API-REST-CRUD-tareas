@@ -7,26 +7,26 @@ public class TareaMapper {
 
     public static TareaDTO toDTO(Tarea tarea){
         return new TareaDTO(
-                tarea.getId_tarea(),
+                tarea.getIdTarea(),
                 tarea.getTitulo(),
                 tarea.getDescripcion(),
                 tarea.getEstado(),
-                tarea.getFecha_creacion(),
-                tarea.getFecha_fin(),
-                tarea.getUltima_mod()
+                tarea.getFechaCreacion(),
+                tarea.getFechaFin(),
+                tarea.getUltimaMod()
         );        
     };
 
     public static Tarea toEntity(TareaDTO dto){
 
         Tarea tarea = new Tarea();
-        tarea.setId_tarea(dto.getId_tarea());
+        tarea.setIdTarea(dto.getIdTarea());
         tarea.setTitulo(dto.getTitulo());
         tarea.setDescripcion(dto.getDescripcion());
         tarea.setEstado(dto.getEstado());
-        tarea.setFecha_creacion(dto.getFecha_creacion());
-        tarea.setFecha_fin(dto.getFecha_fin());
-        tarea.setUltima_mod(dto.getUltima_mod());
+        tarea.setFechaCreacion(dto.getFechaCreacion());
+        tarea.setFechaFin(dto.getFechaFin());
+        tarea.setUltimaMod(dto.getUltimaMod());
         return tarea;
     }
 }

@@ -53,34 +53,34 @@
     let valorBase = "";
 
     async function actualizarCelda(elemento){
-        const id = elemento.getAttribute('data-id');
+        const idTarea = elemento.getAttribute('data-id');
         const campo = elemento.getAttribute('data-campo');
 
-        let hay_cambio = true;
-        let valor_nuevo = "";
+        let hayCambio = true;
+        let valorNuevo = "";
         
         if(campo == "titulo" || campo == "descripcion"){
 
-            valor_nuevo = elemento.innerText.trim();
+            valorNuevo = elemento.innerText.trim();
             valorBase = valorOriginal;
             
-            if(valorOriginal == valor_nuevo){
-                hay_cambio = false;
+            if(valorOriginal == valorNuevo){
+                hayCambio = false;
             }
             
         }
         else if(campo == "estado" || campo == "fecha_fin"){
 
-            valor_nuevo = elemento.value;
+            valorNuevo = elemento.value;
             valorBase = valorOriginal;
         }
         
 
-        if(hay_cambio){  
+        if(hayCambio){  
             try{
-                const respuesta = await fetch(`/api/tareas/${id}/${campo}`,{
+                const respuesta = await fetch(`/api/tareas/${idTarea}/${campo}`,{
                     method: 'PATCH',
-                    body: valor_nuevo
+                    body: valorNuevo
                 });
 
                 if(respuesta.ok){
@@ -117,15 +117,15 @@
     }
 
     async function buscarTarea(){
-        const id_tarea = document.getElementById("inputIdTarea").value;
+        const idTarea = document.getElementById("inputIdTarea").value;
 
-        if(isNaN(Number(id_tarea))){
+        if(isNaN(Number(idTarea))){
             alert("El valor no es válido.");
             return;
         }
 
         try{
-            const respuesta = await fetch(`/api/tareas/${id_tarea}`);
+            const respuesta = await fetch(`/api/tareas/${idTarea}`);
 
             if(!respuesta.ok){
                 throw new Error("Tarea no encontrada");
@@ -137,14 +137,14 @@
             tbody.innerHTML = "";
 
             const fila = `<tr>
-                <td>${tarea.id_tarea}</td>
+                <td>${tarea.idTarea}</td>
 
                         <td 
                             contenteditable="true"
                             onfocus="guardarOriginal(this)"
                             onblur="actualizarCelda(this)"
                             class="hover:cursor-pointer"
-                            data-id="${tarea.id_tarea}"
+                            data-id="${tarea.idTarea}"
                             data-campo="titulo"
                         >${tarea.titulo}
                         </td>
@@ -154,7 +154,7 @@
                             onfocus="guardarOriginal(this)"
                             onblur="actualizarCelda(this)"
                             class="hover:cursor-pointer"
-                            data-id="${tarea.id_tarea}"
+                            data-id="${tarea.idTarea}"
                             data-campo="descripcion"
                         >${tarea.descripcion}
                         </td>
@@ -163,7 +163,7 @@
                             <select
                                 onfocus="guardarOriginal(this)" 
                                 onchange="actualizarCelda(this)"
-                                data-id="${tarea.id_tarea}"
+                                data-id="${tarea.idTarea}"
                                 data-campo="estado"
                             >
                                 <option value="POR_HACER" ${tarea.estado === 'POR_HACER' ? 'selected' : ''}>POR HACER</option>
@@ -171,24 +171,24 @@
                             </select>
                         </td>
 
-                        <td>${tarea.fecha_creacion}</td>
+                        <td>${tarea.fechaCreacion}</td>
                         <td>
                             <input type="datetime-local"
-                                value=${tarea.fecha_fin}
+                                value=${tarea.fechaFin}
                                 onfocus="guardarOriginal(this)"
                                 onchange="actualizarCelda(this)"
-                                data-id="${tarea.id_tarea}"
+                                data-id="${tarea.idTarea}"
                                 data-campo="fecha_fin"
                             >
                         </td>
-                <td>${tarea.ultima_mod}</td>
+                <td>${tarea.ultimaMod}</td>
                 <td>
-                    <a href="form.html?id=${tarea.id_tarea}">
+                    <a href="form.html?id=${tarea.idTarea}">
                         <button  class="btn bg-blue-500 text-white font-bold rounded p-2 m-2 shadow-md/30 hover:cursor-pointer">Editar</button>
                     </a>
                 </td>
                 <td>
-                        <button onclick="eliminarTarea(${tarea.id_tarea})" class="btn bg-red-500 text-white font-bold rounded p-2 m-2 shadow-md/30 hover:cursor-pointer">Borrar</button>
+                        <button onclick="eliminarTarea(${tarea.idTarea})" class="btn bg-red-500 text-white font-bold rounded p-2 m-2 shadow-md/30 hover:cursor-pointer">Borrar</button>
                 </td>
             `;
 
@@ -216,13 +216,13 @@
 
                 tareas.forEach(tarea => {
                     const fila = `<tr>
-                        <td>${tarea.id_tarea}</td>
+                        <td>${tarea.idTarea}</td>
 
                         <td 
                             contenteditable="true"
                             onfocus="guardarOriginal(this)"
                             onblur="actualizarCelda(this)"
-                            data-id="${tarea.id_tarea}"
+                            data-id="${tarea.idTarea}"
                             data-campo="titulo"
                             class="hover:cursor-pointer"
                          >${tarea.titulo}</td>
@@ -231,7 +231,7 @@
                             contenteditable="true"
                             onfocus="guardarOriginal(this)"
                             onblur="actualizarCelda(this)"
-                            data-id="${tarea.id_tarea}"
+                            data-id="${tarea.idTarea}"
                             data-campo="descripcion"
                             class="hover:cursor-pointer"
                         >${tarea.descripcion}</td>
@@ -240,7 +240,7 @@
                             <select
                                 onfocus="guardarOriginal(this)" 
                                 onchange="actualizarCelda(this)"
-                                data-id="${tarea.id_tarea}"
+                                data-id="${tarea.idTarea}"
                                 data-campo="estado"
                             >
                                 <option value="POR_HACER" ${tarea.estado === 'POR_HACER' ? 'selected' : ''}>POR HACER</option>
@@ -248,25 +248,25 @@
                             </select>
                         </td>
 
-                        <td>${tarea.fecha_creacion}</td>
+                        <td>${tarea.fechaCreacion}</td>
                         <td>
                             <input type="datetime-local"
-                                value=${tarea.fecha_fin}
+                                value=${tarea.fechaFin}
                                 onfocus="guardarOriginal(this)"
                                 onchange="actualizarCelda(this)"
-                                data-id="${tarea.id_tarea}"
+                                data-id="${tarea.idTarea}"
                                 data-campo="fecha_fin"
                             >
                         </td>
 
-                        <td>${tarea.ultima_mod}</td>
+                        <td>${tarea.ultimaMod}</td>
                         <td>
-                            <a href="form.html?id=${tarea.id_tarea}">
+                            <a href="form.html?id=${tarea.idTarea}">
                                 <button  class="btn bg-blue-500 text-white font-bold rounded p-2 m-2 shadow-md/30 hover:cursor-pointer">Editar</button>
                             </a>
                         </td>
                         <td>
-                                <button onclick="eliminarTarea(${tarea.id_tarea})" class="btn bg-red-500 text-white font-bold rounded p-2 m-2 shadow-md/30 hover:cursor-pointer">Borrar</button>
+                                <button onclick="eliminarTarea(${tarea.idTarea})" class="btn bg-red-500 text-white font-bold rounded p-2 m-2 shadow-md/30 hover:cursor-pointer">Borrar</button>
                         </td>
                     `
                     tbody.innerHTML += fila;
@@ -288,13 +288,13 @@
         }
     }
 
-    async function eliminarTarea(id){
-        if(!confirm("¿Quieres eliminar la tarea con id: "+id+"?")){
+    async function eliminarTarea(idTarea){
+        if(!confirm("¿Quieres eliminar la tarea con id: "+idTarea+"?")){
             return;
         }
 
         try{
-            const response = await fetch(`/api/tareas/${id}`,{
+            const response = await fetch(`/api/tareas/${idTarea}`,{
                 method:'DELETE'
             });
 
