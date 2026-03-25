@@ -26,8 +26,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 @RequestMapping("/api/tareas")
 public class TareaController {
 
-    @Autowired
-    private TareaService servicioTarea;
+
+    private final TareaService servicioTarea;
+
+    public TareaController(TareaService servicioTarea){
+        this.servicioTarea = servicioTarea;
+    }
 
     @GetMapping
     public List<TareaDTO> Listar(){

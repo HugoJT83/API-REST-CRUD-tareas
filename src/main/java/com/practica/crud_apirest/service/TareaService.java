@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.practica.crud_apirest.dto.TareaDTO;
 import com.practica.crud_apirest.entity.Estado;
@@ -16,8 +15,11 @@ import jakarta.persistence.EntityNotFoundException;
 @Service
 public class TareaService {
 
-    @Autowired
-    private TareaRepository repo;
+    private final TareaRepository repo;
+
+    public TareaService (TareaRepository repo){
+        this.repo = repo;
+    }
 
     public List<TareaDTO> serviceListTareas(){
 
