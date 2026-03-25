@@ -49,7 +49,7 @@ El proyecto cuenta con gestión completa de tareas:
 2. **GET** /api/tasks/{id}
 3. **POST** /api/tasks
 4. **PUT** /api/tasks/{id}
-5. **PATCH** /api/tasks/{id}/{campo}
+5. **PATCH** /api/tasks/{id}/status
 6. **DELETE** /api/tasks/{id}
 
 ---
